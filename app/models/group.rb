@@ -1,5 +1,7 @@
 class Group < ActiveRecord::Base
   include ReadableUnguessableUrls
+  AVAILABLE_BETA_FEATURES = ['discussion_iframe']
+  include BetaFeatures
 
   class MaximumMembershipsExceeded < Exception
   end
@@ -7,7 +9,8 @@ class Group < ActiveRecord::Base
   #even though we have permitted_params this needs to be here.. it's an issue
   attr_accessible :name, :members_can_add_members, :parent, :parent_id, :description, :max_size,
                   :cannot_contribute, :full_name, :payment_plan,
-                  :category_id, :max_size, :is_visible_to_parent_members, :is_visible_to_public, :discussion_privacy_options
+                  :category_id, :max_size, :is_visible_to_parent_members, :is_visible_to_public, :discussion_privacy_options,
+                  :visible_to
   acts_as_tree
 
   PAYMENT_PLANS = ['pwyc', 'subscription', 'manual_subscription', 'undetermined']
@@ -175,6 +178,10 @@ class Group < ActiveRecord::Base
 
   def is_hidden_from_public?
     !is_visible_to_public?
+  end
+
+  def is_subgroup_of_hidden_parent?
+    is_subgroup? and parent.is_hidden_from_public?
   end
 
   def visible_to=(term)

@@ -1,4 +1,31 @@
 module GroupsHelper
+  def group_visibilty_options(group)
+    options = []
+
+    unless group.is_subgroup_of_hidden_parent?
+      options << ['Anyone can see the group', 'public']
+    end
+
+    if group.is_subgroup?
+      options << ["Members of #{group.parent_name} can see the group", "parent_members"]
+    end
+
+    options << ["Only members can see the group", "members"]
+
+    options
+  end
+
+  def group_joining_options(group)
+    if group.is_subgroup_of_hidden_parent?
+      [["Anyone in #{group.parent_name} can join", 'request'],
+       ["Anyone in #{group.parent_name} can request to join", 'approval'],
+       ["Invitation only", 'invitation']]
+    else
+      [['Anyone can join', 'request'],
+       ['Anyone can request to join', 'approval'],
+       ['Invitation only', 'invitation']]
+    end
+  end
 
   def css_for_privacy_link(group, link)
     current_privacy_setting = String(group.privacy)

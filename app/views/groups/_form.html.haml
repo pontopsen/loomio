@@ -6,31 +6,15 @@
   = f.input :description, as: :text
 
 
-  - if group.is_subgroup_of_hidden_parent?
-    = f.input :visible,
-              label: 'Finding the group',
-              as: :radio_buttons,
-              collection: [["Anyone in #{group.parent_name} see the group", true],
-                           ["Only members can see the group", false]]
-    = f.input :membership_granted_upon,
-              label: 'Joining the group',
-              as: :radio_buttons,
-              collection: [["Anyone in #{group.parent_name} can join", 'request'],
-                           ["Anyone in #{group.parent_name} can request to join", 'approval'],
-                           ["Invitation only", 'invitation']]
-  - else
-    = f.input :visible,
-              label: 'Finding the group',
-              as: :radio_buttons,
-              collection: [['Anyone can see the group', true],
-                           ['Only members can see the group', false]]
+  = f.input :visible_to,
+            label: 'Finding the group',
+            as: :radio_buttons,
+            collection: group_visibilty_options(@group)
 
-    = f.input :membership_granted_upon,
-              label: 'Joining the group',
-              as: :radio_buttons,
-              collection: [['Anyone can join', 'request'],
-                           ['Anyone can request to join', 'approval'],
-                           ['Invitation only', 'invitation']]
+  = f.input :membership_granted_upon,
+            label: 'Joining the group',
+            as: :radio_buttons,
+            collection: group_joining_options(@group)
 
   = f.input :members_can_add_members,
             label: 'Who can add members?',
@@ -38,19 +22,18 @@
             collection: [['All members', true],
                          ['Coordinators Only', false]]
 
-  -if group.is_subgroup_of_hidden_parent?
-    = f.input :parent_members_can_see_discussions,
-              label: 'Discussion Privacy',
-              as: :radio_buttons,
-              collection: [["Anyone in #{group.parent_name} can see discussions", true],
-                           ['Only members can see discussions', false]]
-  - else
-    = f.input :discussion_privacy,
-              label: 'Discussion Privacy',
-              as: :radio_buttons,
-              collection: [['Public discussions only', 'public_only'],
-                           ['Allow Public and private discussions', 'public_or_private'],
-                           ['Private discussions only', 'private_only']]
+  = f.input :parent_members_can_see_discussions,
+            label: 'Discussion Privacy',
+            as: :radio_buttons,
+            collection: [["Anyone in #{group.parent_name} can see discussions", true],
+                         ['Only members can see discussions', false]]
+
+  = f.input :discussion_privacy_options,
+            label: 'Discussion Privacy',
+            as: :radio_buttons,
+            collection: [['Public discussions only', 'public_only'],
+                         ['Allow Public and private discussions', 'public_or_private'],
+                         ['Private discussions only', 'private_only']]
 
   = f.input :parent_id, :as => :hidden, :input_html => { :value => group.parent.id } if group.parent
   = f.submit submit_text, class: 'btn btn-info btn-large', id: 'group_form_submit', :data => { :disable_with => submit_text }

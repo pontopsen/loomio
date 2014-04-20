@@ -9,6 +9,9 @@ activate_discussions_tooltips = () ->
     title: 'There have been new comments on this discussion since you last visited the group.'
 
 $ ->
+  is_subgroup = ->
+    $('group_parent_id').val()?
+
   disable = ($el) ->
     $el.prop('disable', true)
     $el.parent().addClass('disabled')
@@ -16,19 +19,28 @@ $ ->
   check = ($el) ->
     $el.prop('checked', true)
 
+  toggle_discussion_privacy_options = ->
+    if is_subgroup and $('#group_visible_to_public').is(':checked')
+      $('.group_parent_members_can_see_discussions').hide()
+      $('.group_discussion_privacy_options').show()
+    else
+      $('.group_parent_members_can_see_discussions').show()
+      $('.group_discussion_privacy_options').hide()
+
   set_private_discussions_only = ->
     #check private discussions only
     check $('#group_discussion_privacy_private_only')
+
     #disable other privacy choices
-    disable $('#group_discussion_privacy_public_or_private,
-               #group_discussion_privacy_public_only')
+    disable $('#group_discussion_privacy_options_public_or_private,
+               #group_discussion_privacy_options_public_only')
 
   set_public_discussions_only = ->
     #check public discussions only
-    check $('#group_discussion_privacy_public_only')
+    check $('#group_discussion_privacy_options_public_only')
     #disable other privacy choices
-    disable $('#group_discussion_privacy_public_or_private,
-               #group_discussion_privacy_private_only')
+    disable $('#group_discussion_privacy_options_public_or_private,
+               #group_discussion_privacy_options_private_only')
 
   set_invitation_only = ->
     #check invitation only
@@ -45,16 +57,27 @@ $ ->
     #undisable everything
     $('form.new_group input, form.edit_group input').prop('disabled', false)
     $('form.new_group label, form.edit_group label').removeClass('disabled')
+    toggle_discussion_privacy_options()
 
-    if $('#group_visible_to_public_false').is(':checked')
-      set_invitation_only()
-      set_private_discussions_only()
-
-    if $('#group_visible_to_public_true').is(':checked')
+    if $('#group_visible_to_public').is(':checked')
+      show_discussion_privacy_options()
       #if anyone can join
       if $('#group_membership_granted_upon_request').is(':checked')
         set_public_discussions_only()
         set_members_can_add_members_only()
 
+
+    if $('#group_visible_to_parent_members').is(':checked')
+      #set_invitation_only()
+      set_private_discussions_only()
+
+    if $('#group_visible_to_members').is(':checked')
+      set_invitation_only()
+      set_private_discussions_only()
+
+
   $('form.new_group, form.edit_group').on 'change', ->
     update_group_form_state()
+
+  # and when the dom loads
+  update_group_form_state()

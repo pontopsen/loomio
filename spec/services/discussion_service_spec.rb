@@ -11,7 +11,7 @@ end
 
 describe 'DiscussionService' do
   let(:comment_vote) { double(:comment_vote) }
-  let(:ability) { double(:ability, :authorize! => true) }
+  let(:ability) { double(:ability, :authorize! => true, can?: true) }
   let(:user) { double(:user, ability: ability, update_attributes: true) }
   let(:discussion) { double(:discussion, author: user,
                                          save: true,
@@ -21,8 +21,10 @@ describe 'DiscussionService' do
                                          :uses_markdown= => true,
                                          inherit_group_privacy!: nil,
                                          uses_markdown: true,
+                                         :iframe_src= => true,
                                          update_attribute: true,
                                          update_attributes: true,
+                                         group: true,
                                          private: true,
                                          created_at: Time.now) }
   let(:comment) { double(:comment,

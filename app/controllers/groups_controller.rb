@@ -5,6 +5,7 @@ class GroupsController < GroupBaseController
   authorize_resource except: :create
 
   before_filter :ensure_group_is_setup, only: :show
+  before_filter :assign_meta_data, only: :show
 
   caches_action :show, :cache_path => Proc.new { |c| c.params }, unless: :user_signed_in?, :expires_in => 5.minutes
 
@@ -73,11 +74,9 @@ class GroupsController < GroupBaseController
                                                             preload(:current_motion, {:group => :parent}).
                                                             page(params[:page]).per(20)
 
-    @closed_motions = Queries::VisibleMotions.new(user: current_user, groups: @group)
+    @closed_motions = Queries::VisibleMotions.new(user: current_user, groups: @group).order('closed_at desc')
 
     build_discussion_index_caches
-
-    assign_meta_data
   end
 
   def edit
