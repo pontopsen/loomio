@@ -22,11 +22,12 @@
             collection: [['All members', true],
                          ['Coordinators Only', false]]
 
-  = f.input :parent_members_can_see_discussions,
-            label: 'Discussion Privacy',
-            as: :radio_buttons,
-            collection: [["Anyone in #{group.parent_name} can see discussions", true],
-                         ['Only members can see discussions', false]]
+  - if @group.is_subgroup?
+    = f.input :parent_members_can_see_discussions,
+              label: 'Discussion Privacy',
+              as: :radio_buttons,
+              collection: [["Anyone in #{group.parent_name} can see discussions", true],
+                           ['Only members can see discussions', false]]
 
   = f.input :discussion_privacy_options,
             label: 'Discussion Privacy',
@@ -35,7 +36,7 @@
                          ['Allow Public and private discussions', 'public_or_private'],
                          ['Private discussions only', 'private_only']]
 
-  = f.input :parent_id, :as => :hidden, :input_html => { :value => group.parent.id } if group.parent
+  = f.input :parent_id, :as => :hidden
   = f.submit submit_text, class: 'btn btn-info btn-large', id: 'group_form_submit', :data => { :disable_with => submit_text }
   = f.button :button, 'Reset', :type => 'reset', :class => 'btn'
 

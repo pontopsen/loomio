@@ -10,7 +10,7 @@ activate_discussions_tooltips = () ->
 
 $ ->
   is_subgroup = ->
-    $('group_parent_id').val()?
+    $('#group_parent_id').val().length > 0
 
   disable = ($el) ->
     $el.prop('disable', true)
@@ -20,16 +20,22 @@ $ ->
     $el.prop('checked', true)
 
   toggle_discussion_privacy_options = ->
-    if is_subgroup and $('#group_visible_to_public').is(':checked')
-      $('.group_parent_members_can_see_discussions').hide()
-      $('.group_discussion_privacy_options').show()
-    else
-      $('.group_parent_members_can_see_discussions').show()
-      $('.group_discussion_privacy_options').hide()
+    if is_subgroup()
+      if $('#group_visible_to_public').is(':checked')
+        $('.group_parent_members_can_see_discussions').hide()
+        $('.group_discussion_privacy_options').show()
+      else
+        $('.group_parent_members_can_see_discussions').show()
+        $('.group_discussion_privacy_options').hide()
 
   set_private_discussions_only = ->
     #check private discussions only
-    check $('#group_discussion_privacy_private_only')
+    if !$('#group_visible_to_parent_members').is(':checked')
+      check $('#group_parent_members_can_see_discussions_false')
+      disable $('#group_parent_members_can_see_discussions_true')
+
+
+    check $('#group_discussion_privacy_options_private_only')
 
     #disable other privacy choices
     disable $('#group_discussion_privacy_options_public_or_private,
@@ -60,7 +66,6 @@ $ ->
     toggle_discussion_privacy_options()
 
     if $('#group_visible_to_public').is(':checked')
-      show_discussion_privacy_options()
       #if anyone can join
       if $('#group_membership_granted_upon_request').is(':checked')
         set_public_discussions_only()
