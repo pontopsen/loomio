@@ -3,30 +3,29 @@ Given(/^I am on the create a group page$/) do
 end
 
 When(/^a group is made visible, join on request$/) do
-  choose 'group_visible_true'
+  choose 'group_visible_to_public'
   choose 'group_membership_granted_upon_request'
 end
 
 Then(/^discussion privacy is set to public, and other options are disabled$/) do
-  view_screenshot
   find('#group_discussion_privacy_public_only')['selected'].should == 'selected'
   find('#group_discussion_privacy_public_or_private')['disabled'].should == 'disabled'
   find('#group_discussion_privacy_private_only')['disabled'].should == 'disabled'
 end
 
 When(/^a group is made visible, join on approval$/) do
-  choose 'group_visible_true'
+  choose 'group_visible_to_public'
   choose 'group_membership_granted_upon_approval'
 end
 
 Then(/^all 3 discussion privacy options are available$/) do
-  find('#group_discussion_privacy_public_only')['disabled'].should be_nil
-  find('#group_discussion_privacy_public_or_private')['disabled'].should be_nil
-  find('#group_discussion_privacy_private_only')['disabled'].should be_nil
+  find('#group_discussion_privacy_options_public_only')['disabled'].should be_nil
+  find('#group_discussion_privacy_options_public_or_private')['disabled'].should be_nil
+  find('#group_discussion_privacy_options_private_only')['disabled'].should be_nil
 end
 
 When(/^a group is made hidden$/) do
-  choose 'group_visible_false'
+  choose 'group_visible_to_members'
 end
 
 Then(/^the form selects invitation only, and disables other join options$/) do

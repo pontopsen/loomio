@@ -58,12 +58,16 @@ $ ->
   set_members_can_add_members_only = ->
     check $('#group_members_can_add_members_true')
     disable $('#group_members_can_add_members_false')
+    $('.group_members_can_add_members').hide()
 
   update_group_form_state = ->
+    return unless $('form.new_group, form.edit_group').length > 0
+
     #undisable everything
     $('form.new_group input, form.edit_group input').prop('disabled', false)
     $('form.new_group label, form.edit_group label').removeClass('disabled')
     toggle_discussion_privacy_options()
+    $('.group_members_can_add_members').show()
 
     if $('#group_visible_to_public').is(':checked')
       #if anyone can join

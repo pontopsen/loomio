@@ -33,10 +33,6 @@ class Group < ActiveRecord::Base
   pg_search_scope :search_full_name, against: [:name, :description],
     using: {tsearch: {dictionary: "english"}}
 
-  scope :public, where(visible: true)
-  scope :hidden, where(visible: false)
-
-  scope :visible_on_explore_front_page, -> { published.categorised_any.parents_only }
 
   scope :categorised_any, -> { where('groups.category_id IS NOT NULL') }
   scope :in_category, -> (category) { where(category_id: category.id) }
@@ -48,8 +44,10 @@ class Group < ActiveRecord::Base
 
   scope :sort_by_popularity, order('memberships_count DESC')
 
-  scope :visible_to_the_public, published.where(visible: true).parents_only
-  scope :visible, where(visible: true)
+  scope :public, published.where(visible_to_public: true)
+  scope :hidden, published.where(visible_to_public: false)
+
+  scope :visible_on_explore_front_page, -> { published.categorised_any.parents_only }
 
   scope :manual_subscription, -> { where(payment_plan: 'manual_subscription') }
 
@@ -186,7 +184,7 @@ class Group < ActiveRecord::Base
   end
 
   def visible_to=(term)
-    case term
+    case term.to_s
     when 'public'
       self.is_visible_to_public = true
       self.is_visible_to_parent_members = false

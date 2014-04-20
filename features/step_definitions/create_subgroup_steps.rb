@@ -1,9 +1,9 @@
 When(/^I create a totally open subgroup$/) do
   fill_in 'group_name', with: 'subgroup'
   fill_in 'group_description', with: 'description'
-  choose 'group_visible_true'
-  choose 'group_discussion_privacy_public_only'
-  check  'group_is_visible_to_parent_members'
+  choose 'group_visible_to_public'
+  choose 'group_discussion_privacy_options_public_only'
+  check  'group_visible_to_parent_members'
   choose 'group_members_can_add_members_true'
   click_on 'group_form_submit'
 end
@@ -20,8 +20,8 @@ end
 When(/^I create a locked down subgroup$/) do
   fill_in 'group_name', with: 'subgroup'
   fill_in 'group_description', with: 'description'
-  choose 'group_visible_false'
-  choose 'group_discussion_privacy_private_only'
+  choose 'group_visible_to_members'
+  choose 'group_discussion_privacy_options_private_only'
   choose 'group_members_can_add_members_false'
   click_on 'group_form_submit'
 end
