@@ -44,8 +44,8 @@ class Group < ActiveRecord::Base
 
   scope :sort_by_popularity, order('memberships_count DESC')
 
-  scope :public, published.where(visible_to_public: true)
-  scope :hidden, published.where(visible_to_public: false)
+  scope :public, published.where(is_visible_to_public: true)
+  scope :hidden, published.where(is_visible_to_public: false)
 
   scope :visible_on_explore_front_page, -> { published.categorised_any.parents_only }
 

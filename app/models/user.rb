@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
   has_many :visible_to_public_groups,
            :through => :memberships,
            :source => :group,
-           :conditions => { visible_to_public: true }
+           :conditions => { is_visible_to_public: true }
 
   has_many :discussions,
            :through => :groups

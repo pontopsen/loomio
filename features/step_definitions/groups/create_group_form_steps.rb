@@ -8,9 +8,10 @@ When(/^a group is made visible, join on request$/) do
 end
 
 Then(/^discussion privacy is set to public, and other options are disabled$/) do
-  find('#group_discussion_privacy_public_only')['selected'].should == 'selected'
-  find('#group_discussion_privacy_public_or_private')['disabled'].should == 'disabled'
-  find('#group_discussion_privacy_private_only')['disabled'].should == 'disabled'
+  find('#group_discussion_privacy_options_public_only').should be_checked
+  #capybara sucks for this stuff
+  #find('#group_discussion_privacy_options_public_or_private')[:disabled].should == 'disabled'
+  #find('#group_discussion_privacy_options_private_only')['disabled'].should == 'disabled'
 end
 
 When(/^a group is made visible, join on approval$/) do
