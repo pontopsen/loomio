@@ -214,6 +214,9 @@ body.discussions.show {
 
     #discussion-title { font-size: 22px; }
   }
+  .discussion-title-translation { 
+    padding: 0 15px 10px; 
+  }
   #discussion-content-container {
     background-color: white;
     border-top: 1px solid $lighter-grey;
@@ -460,11 +463,6 @@ body.discussions.show {
         }
         p:last-child{margin-bottom: 2px;}
       }
-      .activity-item-translation {
-        display: none;
-        padding: 0 0 5px 5px;
-        font-style: italic;
-      }
       .activity-item-likes{
         color: $dark-grey;
         font-size: $font-tiny;
@@ -472,6 +470,7 @@ body.discussions.show {
       .activity-item-time{
         color: $dark-grey;
         font-size: $font-tiny;
+        .translate-link { font-size: $font-medium; }
       }
     }
   }
@@ -716,3 +715,14 @@ div.jqplot-table-legend-swatch{
   margin-right: -26px;
   width: 0;
 }
+
+.translate-link {
+  font-size: $font-tiny;
+}
+
+.translated {
+  display: none;
+  padding: 5px 0 10px;
+  font-style: italic;
+}
+
